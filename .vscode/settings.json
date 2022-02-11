@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "*.itcl": "tcl",
+        "*.l": "lex",
+        "*.yacc": "yacc",
+        "*.rmd": "markdown",
+        "iosfwd": "cpp",
+        "fstream": "cpp",
+        "iostream": "cpp",
+        "system_error": "cpp"
+    }
+}
