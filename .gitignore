@@ -1,4 +1,5 @@
 *.o
-.vscode/*
-desktop.ini
 *.exe
+*.txt
+.vscode
+desktop.ini
