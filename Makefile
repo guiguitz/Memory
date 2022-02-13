@@ -8,7 +8,7 @@
 GCC      := C:\msys64\mingw64
 CXX      := $(GCC)\bin\g++
 CXXFLAGS := -Wall -DDEBUG -g -std=c++0x
-LD_LIBRARY_PATH      := $(GCC)\lib64
+LD_LIBRARY_PATH      := $(GCC)\lib
 LDFLAGS  := -L$(LD_LIBRARY_PATH)
 TARGET   := main
 SRC      := $(wildcard *.cpp)
