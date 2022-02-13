@@ -1,4 +1,5 @@
 #include "Cache.h"
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -6,10 +7,18 @@
 
 using namespace std;
 #define DEBUG(code)           \
-    if (1)                    \
+    if (0)                    \
     {                         \
         cout << code << '\n'; \
     }
+
+fstream tmp_file{"tmp.txt"};
+#define DEBUG_IN_A_FILE(code)                                                  \
+  tmp_file.open("tmp.txt", fstream::app);                                      \
+  if (1) {                                                                     \
+    tmp_file << code << '\n';                                                  \
+  }                                                                            \
+  tmp_file.close();
 
 // String delimiter
 static vector<string> split(const string &s, const string &delimiter)
@@ -73,20 +82,23 @@ int main()
         myCache.doInstruction_in_Cache(instruction);
     }
     myCache.final_Results();
-    // for (auto& block : myCache.m_blocks)
-    // {
-    //     DEBUG("########################")
-    //     DEBUG("   {" << block.m_dirty << ", " << block.m_idxInsideCache << "}")
-    //     for (auto& word : block.m_block) {
-    //         DEBUG("     -> {" << word.m_word << ", " << word.m_valid << ", " << word.m_idxInsideBlock << "}")
-    //     }
-    // }
-    // Main_memory myMemory;
-    // for (auto& word : myMemory.m_word)
-    // {
-    //     DEBUG("------------------------------")
-    //     DEBUG("     -> {" << word.m_word << ", " << word.m_valid << ", " << word.m_idxInsideMemory << "}")
-    // }
+
+    DEBUG_IN_A_FILE("\n\nBlocks in cache \n\n")
+    for (auto& block : myCache.m_blocks)
+    {
+        DEBUG_IN_A_FILE("########################")
+        DEBUG_IN_A_FILE("   {" << block.m_dirty << ", " << block.m_idxInsideCache << "}")
+        for (auto& word : block.m_block) {
+            DEBUG_IN_A_FILE("     -> {" << word.m_word << ", " << word.m_valid << ", " << word.m_idxInsideBlock << "}")
+        }
+    }
+
+    DEBUG_IN_A_FILE("\n\nData Memory \n\n")
+    for (auto& word : myCache.m_data_memory.m_words)
+    {
+        DEBUG_IN_A_FILE("------------------------------")
+        DEBUG_IN_A_FILE("     -> {" << word.m_word << ", " << word.m_idxInsideMemory << "}")
+    }
 
     return 0;
 }

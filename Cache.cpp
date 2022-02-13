@@ -36,6 +36,71 @@ Cache::~Cache()
     m_result_file.close();
 }
 
+void Cache::updateMemoryWithBlockData (const int address, const int word_idx, const int block_num)
+{
+    Block& actual_cache_block = m_blocks[block_num];
+    Word& actual_cache_word = actual_cache_block.m_block[word_idx];
+
+    DEBUG("\ninput block:")
+    DEBUG("actual_cache_block.m_block[0].m_word: " << actual_cache_block.m_block[0].m_word)
+    DEBUG("actual_cache_block.m_block[1].m_word: " << actual_cache_block.m_block[1].m_word)
+    DEBUG("actual_cache_block.m_block[2].m_word: " << actual_cache_block.m_block[2].m_word)
+    DEBUG("actual_cache_block.m_block[3].m_word: " << actual_cache_block.m_block[0].m_word)
+
+    if (word_idx == 0)
+    {
+        m_data_memory.m_words[address].m_word = actual_cache_block.m_block[0].m_word;
+        m_data_memory.m_words[address+1].m_word = actual_cache_block.m_block[1].m_word;
+        m_data_memory.m_words[address+2].m_word = actual_cache_block.m_block[2].m_word;
+        m_data_memory.m_words[address+3].m_word = actual_cache_block.m_block[3].m_word;
+        DEBUG("\ninput block:")
+        DEBUG("address: " << address << " - address+1: " << address+1 << " - address+2: " << address+2 << " - address+3: " << address+3)
+        DEBUG("m_data_memory.m_words[ <<address].m_word: " << m_data_memory.m_words[address].m_word)
+        DEBUG("m_data_memory.m_words[ <<address+1].m_word: " << m_data_memory.m_words[address+1].m_word)
+        DEBUG("m_data_memory.m_words[ <<address+2].m_word: " << m_data_memory.m_words[address+2].m_word )
+        DEBUG("m_data_memory.m_words[ <<address+3].m_word: " << m_data_memory.m_words[address+3].m_word)
+    }
+    else if (word_idx == 1)
+    {
+        m_data_memory.m_words[address-1].m_word = actual_cache_block.m_block[0].m_word;
+        m_data_memory.m_words[address].m_word = actual_cache_block.m_block[1].m_word;
+        m_data_memory.m_words[address+1].m_word = actual_cache_block.m_block[2].m_word;
+        m_data_memory.m_words[address+2].m_word = actual_cache_block.m_block[3].m_word;
+
+        DEBUG("address-1: " << address-1 << " - address: " << address << " - address+1: " << address+1 << " - address+2: " << address+2)
+        DEBUG("m_data_memory.m_words[address-1].m_word: " << m_data_memory.m_words[address-1].m_word)
+        DEBUG("m_data_memory.m_words[address].m_word: " << m_data_memory.m_words[address].m_word)
+        DEBUG("m_data_memory.m_words[address+1].m_word: " << m_data_memory.m_words[address+1].m_word )
+        DEBUG("m_data_memory.m_words[address+2].m_word: " << m_data_memory.m_words[address+2].m_word)
+    }
+    else if (word_idx == 2)
+    {
+        m_data_memory.m_words[address-2].m_word = actual_cache_block.m_block[0].m_word;
+        m_data_memory.m_words[address-1].m_word = actual_cache_block.m_block[1].m_word;
+        m_data_memory.m_words[address].m_word = actual_cache_block.m_block[2].m_word;
+        m_data_memory.m_words[address+1].m_word = actual_cache_block.m_block[3].m_word;
+
+        DEBUG("address-2: " << address-2 << " - address-1: " << address-1 << " - address: " << address << " - address+1: " << address+1)
+        DEBUG("m_data_memory.m_words[address-2].m_word: " << m_data_memory.m_words[address-2].m_word)
+        DEBUG("m_data_memory.m_words[address-1].m_word: " << m_data_memory.m_words[address-1].m_word)
+        DEBUG("m_data_memory.m_words[address].m_word: " << m_data_memory.m_words[address].m_word )
+        DEBUG("m_data_memory.m_words[address+1].m_word: " << m_data_memory.m_words[address+1].m_word)
+    }
+    else if (word_idx == 3)
+    {
+        m_data_memory.m_words[address-3].m_word = actual_cache_block.m_block[0].m_word;
+        m_data_memory.m_words[address-2].m_word = actual_cache_block.m_block[1].m_word;
+        m_data_memory.m_words[address-1].m_word = actual_cache_block.m_block[2].m_word;
+        m_data_memory.m_words[address].m_word = actual_cache_block.m_block[3].m_word;
+
+        DEBUG("address-3: " << address-3 << " - address-2: " << address-2 << " - address-1: " << address-1 << " - address: " << address)
+        DEBUG("m_data_memory.m_words[address-3].m_word: " << m_data_memory.m_words[address-3].m_word)
+        DEBUG("m_data_memory.m_words[address-2].m_word: " << m_data_memory.m_words[address-2].m_word)
+        DEBUG("m_data_memory.m_words[address-1].m_word: " << m_data_memory.m_words[address-1].m_word )
+        DEBUG("m_data_memory.m_words[address].m_word: " << m_data_memory.m_words[address].m_word)
+    }
+}
+
 void Cache::doInstruction_in_Cache(const intruction &instru)
 {
     const int address = instru.address;
@@ -50,6 +115,13 @@ void Cache::doInstruction_in_Cache(const intruction &instru)
     // DEBUG("actual_cache_block.m_dirty: " << actual_cache_block.m_dirty)
     // DEBUG("actual_cache_block.m_idxInsideCache: " << actual_cache_block.m_idxInsideCache)
     actual_cache_word.m_valid = true;
+    bool is_dirty = actual_cache_block.m_dirty;
+
+    if (is_dirty)
+    {
+        updateMemoryWithBlockData(address, word_idx, block_num);
+    }
+
     if (op)
     {
         m_write_counter++;
@@ -72,7 +144,6 @@ void Cache::doInstruction_in_Cache(const intruction &instru)
         // DEBUG("actual_cache_word.m_tag: " << actual_cache_word.m_tag)
         // DEBUG("address: " << address)
         // DEBUG("is_valid: " << is_valid << " - is_same_tag: " << is_same_tag)
-        // DEPOIS OLHAR SE O BLOCO ESTA SUJO
         if (is_valid && is_same_tag)
         {
             m_hit_counter++;

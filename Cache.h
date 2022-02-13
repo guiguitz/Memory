@@ -40,4 +40,5 @@ using Cache = struct Cache
     ~Cache();
     void doInstruction_in_Cache(const ::intruction &instru);
     void final_Results();
+    void updateMemoryWithBlockData (const int address, const int word_idx, const int block_num);
 };
