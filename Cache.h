@@ -37,6 +37,7 @@ using Cache = struct Cache
     int m_miss_counter = 0;
     std::fstream m_result_file{};
     explicit Cache();
+    ~Cache();
     void doInstruction_in_Cache(const ::intruction &instru);
     void final_Results();
 };
