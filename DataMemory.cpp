@@ -2,10 +2,9 @@
 
 using namespace std;
 
-Word_M::Word_M(const int idxInsideMemory)
-    : m_word{string{}}, m_idxInsideMemory{idxInsideMemory} {}
+wordInMemory::wordInMemory(const int idx_inside_memory) : m_word{string{}}, m_idx_inside_memory{idx_inside_memory} {}
 
-Main_memory::Main_memory()
+dataMemory::dataMemory()
 {
     for (int i = 0; i < 1024; i++)
     {

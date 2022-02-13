@@ -1,44 +1,51 @@
+#include "DataMemory.h"
+
+#include <fstream>
 #include <string>
 #include <vector>
-#include "DataMemory.h"
-#include <fstream>
 
-typedef struct intruction
+using instruction = struct instruction
 {
-    int address;
-    bool operation; /* 0 -> reading or 1 -> writing */
-    std::string data;
+    explicit instruction(const int& address, const bool& operation, std::string data);
+
+    int m_address;
+    bool m_operation; /* 0 -> reading or 1 -> writing */
+    std::string m_data;
 };
 
-using Word = struct Word
+using word = struct word
 {
+    explicit word(const int idx_inside_block);
+
     std::string m_word;
     bool m_valid;
-    const int m_idxInsideBlock;
+    const int m_idx_inside_block;
     int m_tag = 5000;
-    explicit Word(const int idxInsideBlock);
 };
 
-using Block = struct Block
+using block = struct block
 {
-    std::vector<Word> m_block;
+    explicit block(const int idx_inside_cache);
+
+    std::vector<word> m_block;
     bool m_dirty;
-    const int m_idxInsideCache;
-    explicit Block(const int idxInsideCache);
+    const int m_idx_inside_cache;
 };
 
-using Cache = struct Cache
+using cache = struct cache
 {
-    std::vector<Block> m_blocks;
-    Main_memory m_data_memory;
+    explicit cache();
+    ~cache();
+
+    std::vector<block> m_blocks;
+    dataMemory m_data_memory;
     int m_read_counter = 0;
     int m_write_counter = 0;
     int m_hit_counter = 0;
     int m_miss_counter = 0;
-    std::fstream m_result_file{};
-    explicit Cache();
-    ~Cache();
-    void doInstruction_in_Cache(const ::intruction &instru);
-    void final_Results();
-    void updateMemoryWithBlockData (const int address, const int word_idx, const int block_num);
+    std::ofstream m_result_file;
+
+    void runInstructionInCache(const instruction& runInstruction);
+    void generateFinalResults();
+    void updateMemoryWithBlockData(const int address, const int word_idx, const int block_num);
 };

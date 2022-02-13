@@ -1,15 +1,17 @@
 #include <string>
 #include <vector>
 
-using Word_M = struct Word_M
+using wordInMemory = struct wordInMemory
 {
+    explicit wordInMemory(const int idx_inside_memory);
+
     std::string m_word;
-    const int m_idxInsideMemory;
-    explicit Word_M(const int idxInsideMemory);
+    const int m_idx_inside_memory;
 };
 
-using Main_memory = struct Main_memory
+using dataMemory = struct dataMemory
 {
-    std::vector<Word_M> m_words;
-    explicit Main_memory();
+    explicit dataMemory();
+
+    std::vector<wordInMemory> m_words;
 };
