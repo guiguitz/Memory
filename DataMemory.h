@@ -1,3 +1,6 @@
+#ifndef DATA_MEMORY_H
+#define DATA_MEMORY_H
+
 #include <string>
 #include <vector>
 
@@ -15,3 +18,5 @@ using dataMemory = struct dataMemory
 
     std::vector<wordInMemory> m_words;
 };
+
+#endif

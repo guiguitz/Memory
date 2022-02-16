@@ -46,7 +46,6 @@ cache::~cache()
 void cache::updateMemoryWithBlockData(const int address, const int word_idx, const int block_num)
 {
     block& actual_cache_block = m_blocks[block_num];
-    word& actual_cache_word = actual_cache_block.m_block[word_idx];
 
     DEBUG("\nInput block:")
     DEBUG("actual_cache_block.m_block[0].m_word: " << actual_cache_block.m_block[0].m_word)

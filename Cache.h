@@ -1,3 +1,6 @@
+#ifndef CACHE_H
+#define CACHE_H
+
 #include "DataMemory.h"
 
 #include <fstream>
@@ -49,3 +52,5 @@ using cache = struct cache
     void generateFinalResults();
     void updateMemoryWithBlockData(const int address, const int word_idx, const int block_num);
 };
+
+#endif
